@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PostsAndComments.Models;
+using PostsAndComments.Services.Implementation;
+using PostsAndComments.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +37,9 @@ namespace PostsAndComments
             {
                 op.UseSqlServer(Configuration.GetConnectionString("Conn"));
             });
+            services.AddTransient<IUser, UserDb>();
+            services.AddTransient<IMail, SendEmails>();
+            services.AddTransient<IPost, PostDb>();
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -88,11 +93,14 @@ namespace PostsAndComments
 
             app.UseHttpsRedirection();
 
+
+
             app.UseRouting();
-
             app.UseCors(CorsAgent);
-
+            app.UseAuthentication();
             app.UseAuthorization();
+
+
 
             app.UseEndpoints(endpoints =>
             {
