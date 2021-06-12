@@ -40,6 +40,7 @@ namespace PostsAndComments
             services.AddTransient<IUser, UserDb>();
             services.AddTransient<IMail, SendEmails>();
             services.AddTransient<IPost, PostDb>();
+            services.AddTransient<IComment, CommentDb>();
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -47,7 +48,7 @@ namespace PostsAndComments
                 options.Password.RequiredLength = 8;
             }).AddEntityFrameworkStores<BlogContext>().AddDefaultTokenProviders();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PostsAndComments", Version = "v1" });

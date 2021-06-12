@@ -24,7 +24,7 @@ namespace PostsAndComments.Models
 
 
         [ForeignKey("ParentComment")]
-        public int CommentId { get; set; }
+        public int? CommentId { get; set; }
         public virtual Comment ParentComment { get; set; }
 
         public ICollection<Comment> Replies { get; set; }
